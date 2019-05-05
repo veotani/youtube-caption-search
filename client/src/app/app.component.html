@@ -1,0 +1,28 @@
+<!--The content below is only a placeholder and can be replaced.-->
+
+
+<input #query (keyup)="0">
+<button (click)="getSearchResults(query.value)">Search</button>
+<p *ngIf="searchResult">1 caption = 1 document:</p>
+<table>
+    <tr *ngFor="let result of searchResult">
+        <td><a href="{{result['link']}}">{{result['text']}}</a></td>
+    </tr>
+</table>
+
+<p *ngIf="searchPauseSplittedResult">1 fragment = 1 document:</p>
+<table>
+    <tr *ngFor="let result of searchPauseSplittedResult">
+        <td><a href="{{result['link']}}">{{result['text']}}</a></td>
+    </tr>
+</table>
+
+<input #videoId (keyup)="0">
+<button (click)="postVideoToIndex(videoId.value)">Index video with id: </button>
+
+<div *ngIf="!isAuthorizedToGoogle()">
+    You are not authorized to google
+    <button (click)="getAuthLink()">auth</button>
+</div>
+
+<p>Baobab: {{this.baobab}}</p>
