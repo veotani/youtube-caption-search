@@ -4,7 +4,7 @@ from flask import request
 
 from services import caption_retriever
 from services.caption_processor import split_captions, split_by_pauses, get_intersection_captions_indexes, \
-    merge_captions
+    merge_captions, get_similar_captions_indexes
 from services.caption_indexator import index_captions, index_caption_pause_splitted
 from services.caption_search import search_caption, search_caption_pause_splitted
 
@@ -21,7 +21,7 @@ import json
 
 import redis
 
-CLIENT_SECRETS_FILE = "secrets\client_secret_905645781686-rga1p5l65i2k4rnq8i50dsooamfqsk8b.apps.googleusercontent.com.json"
+CLIENT_SECRETS_FILE = "secrets/client_secret_905645781686-rga1p5l65i2k4rnq8i50dsooamfqsk8b.apps.googleusercontent.com.json"
 
 SCOPES = [
     'https://www.googleapis.com/auth/youtube.force-ssl',
@@ -68,6 +68,12 @@ def add_to_index():
     merged_captions = merge_captions(captions_formatted, indexes_to_merge)
     index_caption_pause_splitted(merged_captions, video_id)
 
+    # Merged captions with similar words
+    captions_formatted = split_by_pauses(captions)
+    indexes_to_merge = get_similar_captions_indexes(captions_formatted)
+    merged_captions = merge_captions(captions_formatted, indexes_to_merge)
+    index_caption_pause_splitted(merged_captions, video_id, "similar-captions")
+
     return flask.jsonify("indexed")
 
 
@@ -81,6 +87,10 @@ def search(query):
 def search_pause_splitted(query):
     print(query, file=sys.stdout)
     return flask.jsonify(search_caption_pause_splitted(query))
+
+@app.route('/search_similar_merged/<query>')
+def search_similar_merged(query):
+    return flask.jsonify(search_caption_pause_splitted(query, "similar-captions"))
 
 
 @app.route('/authorize')

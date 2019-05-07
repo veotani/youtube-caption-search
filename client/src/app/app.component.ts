@@ -20,12 +20,14 @@ export class AppComponent implements OnInit {
 	linkToAuth = '';
 	searchResult: any;
 	searchPauseSplittedResult: any;
+	searchSimilarMergedResult: any;
 
 	private searchUrl =      			   'http://127.0.0.1:5000/search/';  // URL to web api
 	private indexUrl =               'http://127.0.0.1:5000/add_to_index';
 	private authLinkUrl =    				 'http://127.0.0.1:5000/authorize';
 	private serverAuthLink = 				 'http://127.0.0.1:5000/oauth2callback';
 	private searchPauseSplittedUrl = 'http://127.0.0.1:5000/search_pause_splitted/';
+	private searchSimilarMergedUrl = 'http://127.0.0.1:5000/search_similar_merged/'
 
 
 	constructor(
@@ -57,13 +59,18 @@ export class AppComponent implements OnInit {
 	}
 
 	getSearchResults(query) {
-		let response = this.http.get<string[]>(this.searchUrl + query);
-		response.subscribe(data => {
-		  if (data != null) { this.searchResult = data; } else { this.searchResult = 'nothing found'; }});
+		this.http.get<string[]>(this.searchUrl + query)
+			.subscribe(data => {
+		  	if (data != null) { this.searchResult = data; } else { this.searchResult = 'nothing found'; }});
 
-		let response = this.http.get<string[]>(this.searchPauseSplittedUrl + query);
-		response.subscribe(data => {
-		  if (data != null) { this.searchPauseSplittedResult = data; } else { this.searchResult = 'nothing found'; }});
+		this.http.get<string[]>(this.searchPauseSplittedUrl + query)
+			.subscribe(data => {
+				if (data != null) { this.searchPauseSplittedResult = data; } else { this.searchPauseSplittedResult = 'nothing found'; }});
+	
+		this.http.get<string[]>(this.searchSimilarMergedUrl + query)
+			.subscribe(data => {
+				if (data != null) { this.searchSimilarMergedResult = data; } else { this.searchSimilarMergedResult = 'nothing found'; }});
+		
 	}
 
   getAuthLink() {

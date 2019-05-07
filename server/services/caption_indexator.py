@@ -14,11 +14,11 @@ def index_captions(captions, video_id):
         es.index(index="simple-captions", doc_type='caption', body=doc)
 
 
-def index_caption_pause_splitted(captions, video_id):
+def index_caption_pause_splitted(captions, video_id, index_name = "pause-splitted-captions"):
     for ctime, ctext in captions:
         doc = {
             'time': ctime,
             'text': ctext,
             'video': video_id,
         }
-        es.index(index="pause-splitted-captions", doc_type='caption', body=doc)
+        es.index(index=index_name, doc_type='caption', body=doc)

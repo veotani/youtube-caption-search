@@ -3,7 +3,8 @@ import sys
 
 def search_caption(query):
     es = Elasticsearch()
-    r = es.search(index='simple-captions', doc_type='caption', q=query)
+    #r = es.search(index='simple-captions', doc_type='caption', q=query)
+    r = es.search(index='simple-captions', q=query)
     result_array = r['hits']['hits'][0:10]
 
     get_text = lambda x: x['_source']['text'].replace('\n', '')
@@ -24,9 +25,9 @@ def search_caption(query):
     
     return res
 
-def search_caption_pause_splitted(query):
+def search_caption_pause_splitted(query, index_name='pause-splitted-captions'):
     es = Elasticsearch()
-    r = es.search(index='pause-splitted-captions', doc_type='caption', q=query)
+    r = es.search(index=index_name, q=query)
     result_array = r['hits']['hits'][0:10]
 
     get_text = lambda x: x['_source']['text'].replace('\n', '')

@@ -1,5 +1,6 @@
 import sys
 
+
 def split_captions(captions):
     res = []
     for i in range(3, len(captions), 3):
@@ -13,7 +14,6 @@ def split_captions(captions):
         
         res.append((sec, captions[i+1]))
     return res
-
 
 
 def split_by_pauses(captions):
@@ -37,6 +37,7 @@ def split_by_pauses(captions):
 
     return captions_converted
 
+
 def get_intersection_captions_indexes(captions):
     intersecting_indexes = [set()]
 
@@ -48,6 +49,27 @@ def get_intersection_captions_indexes(captions):
             intersecting_indexes[-1].add(index)
 
     return intersecting_indexes
+
+
+def get_similar_captions_indexes(captions):
+    similar_indexes = [set()]
+
+    previous_line = set(captions[0][2].split(' '))
+    for index in range(1, len(captions)):
+        current_line = set(captions[index][2].split(' '))
+        if len(current_line & previous_line) > 0:
+            similar_indexes[-1].add(index)
+        else:
+            similar_indexes.append(set())
+            similar_indexes[-1].add(index)
+    
+    count_similar_groups = 0
+    for group in similar_indexes:
+        if len(group) > 1:
+            count_similar_groups += 1
+    print(f'There are {count_similar_groups} similar captions.', file=sys.stdout)
+    return similar_indexes
+
 
 def merge_captions(captions, intersecting_indexes):
     res = []

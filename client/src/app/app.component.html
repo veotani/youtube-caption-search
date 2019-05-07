@@ -6,13 +6,23 @@
 <p *ngIf="searchResult">1 caption = 1 document:</p>
 <table>
     <tr *ngFor="let result of searchResult">
+        <td>{{$index}}</td>
         <td><a href="{{result['link']}}">{{result['text']}}</a></td>
     </tr>
 </table>
 
-<p *ngIf="searchPauseSplittedResult">1 fragment = 1 document:</p>
+<p *ngIf="searchPauseSplittedResult">1 fragment = 1 document (split by pauses):</p>
 <table>
     <tr *ngFor="let result of searchPauseSplittedResult">
+        <td>{{$index}}</td>
+        <td><a href="{{result['link']}}">{{result['text']}}</a></td>
+    </tr>
+</table>
+
+<p *ngIf="searchSimilarMergedResult">1 fragment = 1 document (after clusterisation):</p>
+<table>
+    <tr *ngFor="let result of searchSimilarMergedResult">
+        <td>{{$index}}</td>
         <td><a href="{{result['link']}}">{{result['text']}}</a></td>
     </tr>
 </table>
